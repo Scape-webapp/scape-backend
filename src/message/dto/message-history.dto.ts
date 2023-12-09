@@ -4,9 +4,9 @@ import { ObjectId } from 'mongoose';
 
 export class MessageHistoryBody {
   @ApiProperty({ required: true })
-  to: Array<ObjectId>;
+  receiver: Array<ObjectId>;
 
   @ApiProperty({ required: true })
   @IsObject()
-  from: ObjectId;
+  sender: ObjectId;
 }

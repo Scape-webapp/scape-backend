@@ -23,15 +23,12 @@ export class MessageController {
   @Post('/history')
   async find(@Body() messageHistoryBody: MessageHistoryBody) {
     try {
-      //   messageHistoryBody.to.push(messageHistoryBody.from);
-      //   const filters = {
-      //     to: { $in: messageHistoryBody.to },
-      //     $or: [
-      //       { from: messageHistoryBody.from },
-      //       { from: messageHistoryBody.to },
-      //     ],
-      //   };
-      return await this.messageService.find(messageHistoryBody);
+      messageHistoryBody.receiver.push(messageHistoryBody.sender);
+      const filters = {
+        receiver: { $in: messageHistoryBody.receiver },
+        sender: { $in: messageHistoryBody.receiver },
+      };
+      return await this.messageService.find(filters);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

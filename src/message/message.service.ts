@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MessageBody } from './dto/message.dto';
 import { MessageDocument } from './message.schema';
-import { MessageHistoryBody } from './dto/message-history.dto';
+// import { MessageHistoryBody } from './dto/message-history.dto';
 
 @Injectable()
 export class MessageService {
@@ -15,7 +15,7 @@ export class MessageService {
   create(messageBody: MessageBody) {
     return this.MessageModel.create(messageBody);
   }
-  find(messageHistoryBody: MessageHistoryBody) {
-    return this.MessageModel.find(messageHistoryBody);
+  find(filter) {
+    return this.MessageModel.find(filter);
   }
 }
