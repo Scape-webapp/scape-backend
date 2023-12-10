@@ -1,17 +1,22 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
+  Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserBody } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { UserUpdate } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   @Post('/')
   async create(@Body() userBody: UserBody) {
     try {
@@ -33,6 +38,24 @@ export class UserController {
       } else {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
+    }
+  }
+
+  @Patch('/')
+  async update(@Body() userUpdate: UserUpdate) {
+    try {
+      return await this.userService.update(userUpdate);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('/:id')
+  async findOne(@Param() id: string) {
+    try {
+      return await this.userService.findOne(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }
