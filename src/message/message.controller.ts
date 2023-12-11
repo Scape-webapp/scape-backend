@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
@@ -29,6 +31,14 @@ export class MessageController {
         sender: { $in: messageHistoryBody.receiver },
       };
       return await this.messageService.find(filters);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+  @Get('/:id')
+  async findOne(@Param() id: string) {
+    try {
+      return await this.messageService.fetchLastMsgList(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
