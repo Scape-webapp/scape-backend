@@ -20,6 +20,9 @@ export class User {
   @Prop()
   profile_image: string;
 
+  @Prop()
+  description: string;
+
   @Prop({ default: false })
   is_online: boolean;
 
