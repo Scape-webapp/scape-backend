@@ -1,23 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsDate,
-  IsEmail,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { Date } from 'mongoose';
+import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import { Date, ObjectId } from 'mongoose';
 
-export class UserBody {
+export class UserUpdate {
   @ApiProperty({ required: true })
+  id: ObjectId;
+
+  @ApiProperty()
   @IsString()
   user_name: string;
 
-  @ApiProperty({ required: true })
-  @IsEmail()
-  email: string;
+  //   @ApiProperty({ required: true })
+  //   @IsEmail()
+  //   email: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty()
   @IsString()
   password: string;
 
@@ -25,11 +22,6 @@ export class UserBody {
   @IsString()
   @IsOptional()
   profile_image: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  description: string;
 
   @ApiProperty()
   @IsBoolean()
