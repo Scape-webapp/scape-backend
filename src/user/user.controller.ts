@@ -12,6 +12,9 @@ import { UserService } from './user.service';
 import { UserBody } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserUpdate } from './dto/update-user.dto';
+import { Login } from './dto/login-user.dto';
+import * as jwt from 'jsonwebtoken';
+import * as _ from 'lodash';
 
 @Controller('user')
 export class UserController {
@@ -54,6 +57,40 @@ export class UserController {
   async findById(@Param() id: string) {
     try {
       return await this.userService.findOne(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('/login')
+  async login(@Body() login: Login) {
+    try {
+      let user: any = await this.userService.findFilter({
+        user_name: login.user_name,
+      });
+
+      const isMatch = await bcrypt.compare(login.password, user.password);
+      console.log({ isMatch });
+      if (isMatch) {
+        const accessToken = jwt.sign(
+          { user_name: login.user_name },
+          process.env.ACCESS_SECRET as string,
+          {
+            expiresIn: '60m',
+          },
+        );
+        const refreshToken = jwt.sign(
+          { user_name: login.user_name },
+          process.env.REFRESH_SECRET as string,
+          {
+            expiresIn: '7d',
+          },
+        );
+        user = _.omit(user, ['password']);
+        return { accessToken, refreshToken, user: user };
+      } else {
+        throw new Error('Invalid Username or password!');
+      }
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
