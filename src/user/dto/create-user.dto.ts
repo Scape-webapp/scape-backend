@@ -27,6 +27,15 @@ export class UserBody {
   profile_image: string;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   is_online: boolean;

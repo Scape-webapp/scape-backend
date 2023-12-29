@@ -18,7 +18,13 @@ export class User {
   password: string;
 
   @Prop()
+  name: string;
+
+  @Prop()
   profile_image: string;
+
+  @Prop()
+  description: string;
 
   @Prop({ default: false })
   is_online: boolean;
