@@ -16,6 +16,15 @@ export class UserUpdate {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
+  description: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
   password: string;
 
   @ApiProperty()
