@@ -32,6 +32,10 @@ export class UserBody {
   description: string;
 
   @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   is_online: boolean;

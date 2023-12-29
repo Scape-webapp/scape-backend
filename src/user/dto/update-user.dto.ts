@@ -10,13 +10,18 @@ export class UserUpdate {
   @IsString()
   user_name: string;
 
-  //   @ApiProperty({ required: true })
-  //   @IsEmail()
-  //   email: string;
+  // @ApiProperty({ required: true })
+  // @IsEmail()
+  // email: string;
 
   @ApiProperty()
   @IsString()
-  password: string;
+  @IsOptional()
+  description: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
 
   @ApiProperty()
   @IsString()
