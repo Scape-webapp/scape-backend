@@ -30,8 +30,4 @@ export class UserService {
   findOne(id: string) {
     return this.UserModel.findById(new mongoose.Types.ObjectId(id));
   }
-  // findOne(id: string) {
-  //   const userid = new mongoose.Types.ObjectId(id);
-  //   return this.UserModel.findById(userid);
-  // }
 }

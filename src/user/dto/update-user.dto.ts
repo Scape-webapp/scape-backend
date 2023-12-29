@@ -10,9 +10,9 @@ export class UserUpdate {
   @IsString()
   user_name: string;
 
-  //   @ApiProperty({ required: true })
-  //   @IsEmail()
-  //   email: string;
+  // @ApiProperty({ required: true })
+  // @IsEmail()
+  // email: string;
 
   @ApiProperty()
   @IsString()
@@ -22,10 +22,6 @@ export class UserUpdate {
   @ApiProperty()
   @IsString()
   name: string;
-
-  @ApiProperty()
-  @IsString()
-  password: string;
 
   @ApiProperty()
   @IsString()
