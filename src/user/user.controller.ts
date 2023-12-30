@@ -20,7 +20,7 @@ import * as _ from 'lodash';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('/')
+  @Post('/register')
   async create(@Body() userBody: UserBody) {
     try {
       userBody.password = await bcrypt.hash(userBody.password, 10); // const isMatch = await bcrypt.compare(password, hash);
@@ -39,6 +39,7 @@ export class UserController {
           HttpStatus.BAD_REQUEST,
         );
       } else {
+        console.log('error : ', error);
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     }
