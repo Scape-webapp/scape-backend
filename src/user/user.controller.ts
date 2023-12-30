@@ -7,13 +7,18 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserBody } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserUpdate } from './dto/update-user.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiTags('Attachments')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -50,6 +55,19 @@ export class UserController {
     }
   }
 
+  // @Patch('/')
+  // @UseInterceptors(FileInterceptor('file'))
+  // async update(@UploadedFile() file, @Body() userUpdate: UserUpdate) {
+  //   try {
+  //     if (file) {
+  //       Logger.debug(file, 'FILE UPLOADER');
+  //     }
+  //     return await this.userService.update(userUpdate);
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
   @Get('/:id')
   async findById(@Param() id: string) {
     try {
@@ -57,5 +75,42 @@ export class UserController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @Post('/img')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('file'))
+  upload(@UploadedFile() files) {
+    const response = [];
+    files.forEach((file) => {
+      const fileReponse = {
+        originalname: file.originalname,
+        encoding: file.encoding,
+        mimetype: file.mimetype,
+        id: file.id,
+        filename: file.filename,
+        metadata: file.metadata,
+        bucketName: file.bucketName,
+        chunkSize: file.chunkSize,
+        size: file.size,
+        md5: file.md5,
+        uploadDate: file.uploadDate,
+        contentType: file.contentType,
+      };
+      response.push(fileReponse);
+    });
+    console.log('first', response);
+    return response;
   }
 }
