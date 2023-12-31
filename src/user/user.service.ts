@@ -24,10 +24,19 @@ export class UserService {
       {
         new: true,
       },
-    );
+    ).lean();
   }
 
   findOne(id: string) {
-    return this.UserModel.findById(new mongoose.Types.ObjectId(id));
+    return this.UserModel.findById(new mongoose.Types.ObjectId(id)).lean();
+  }
+
+  // findOne(id: string) {
+  //   const userid = new mongoose.Types.ObjectId(id);
+  //   return this.UserModel.findById(userid);
+  // }
+
+  findFilter(filter: any) {
+    return this.UserModel.findOne(filter).lean();
   }
 }
