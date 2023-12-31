@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Param,
@@ -63,6 +64,7 @@ export class UserController {
     }
   }
 
+  @HttpCode(200)
   @Post('/login')
   async login(@Body() login: Login) {
     try {
@@ -71,7 +73,6 @@ export class UserController {
       });
 
       const isMatch = await bcrypt.compare(login.password, user.password);
-      console.log({ isMatch });
       if (isMatch) {
         const accessToken = jwt.sign(
           { user_name: login.user_name },
