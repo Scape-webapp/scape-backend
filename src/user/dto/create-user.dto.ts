@@ -14,12 +14,13 @@ export class UserBody {
   user_name: string;
 
   @ApiProperty({ required: true })
-  @IsEmail()
-  email: string;
-
-  @ApiProperty({ required: true })
   @IsString()
   password: string;
+
+  @ApiProperty()
+  @IsEmail()
+  @IsOptional()
+  email: string;
 
   @ApiProperty()
   @IsString()
@@ -32,6 +33,7 @@ export class UserBody {
   description: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsString()
   name: string;
 

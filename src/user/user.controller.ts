@@ -2,12 +2,13 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Param,
   Patch,
   Post,
-  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -16,13 +17,16 @@ import * as bcrypt from 'bcrypt';
 import { UserUpdate } from './dto/update-user.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { Login } from './dto/login-user.dto';
+import * as jwt from 'jsonwebtoken';
+import * as _ from 'lodash';
 
 @Controller('user')
 @ApiTags('Attachments')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('/')
+  @Post('/register')
   async create(@Body() userBody: UserBody) {
     try {
       userBody.password = await bcrypt.hash(userBody.password, 10); // const isMatch = await bcrypt.compare(password, hash);
@@ -41,6 +45,7 @@ export class UserController {
           HttpStatus.BAD_REQUEST,
         );
       } else {
+        console.log('error : ', error);
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     }
@@ -55,23 +60,44 @@ export class UserController {
     }
   }
 
-  // @Patch('/')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async update(@UploadedFile() file, @Body() userUpdate: UserUpdate) {
-  //   try {
-  //     if (file) {
-  //       Logger.debug(file, 'FILE UPLOADER');
-  //     }
-  //     return await this.userService.update(userUpdate);
-  //   } catch (error) {
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
-
   @Get('/:id')
   async findById(@Param() id: string) {
     try {
       return await this.userService.findOne(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @HttpCode(200)
+  @Post('/login')
+  async login(@Body() login: Login) {
+    try {
+      let user: any = await this.userService.findFilter({
+        user_name: login.user_name,
+      });
+
+      const isMatch = await bcrypt.compare(login.password, user.password);
+      if (isMatch) {
+        const accessToken = jwt.sign(
+          { user_name: login.user_name },
+          process.env.ACCESS_SECRET as string,
+          {
+            expiresIn: '60m',
+          },
+        );
+        const refreshToken = jwt.sign(
+          { user_name: login.user_name },
+          process.env.REFRESH_SECRET as string,
+          {
+            expiresIn: '7d',
+          },
+        );
+        user = _.omit(user, ['password']);
+        return { accessToken, refreshToken, user: user };
+      } else {
+        throw new Error('Invalid Username or password!');
+      }
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -91,7 +117,7 @@ export class UserController {
     },
   })
   @UseInterceptors(FilesInterceptor('file'))
-  upload(@UploadedFile() files) {
+  upload(@UploadedFiles() files) {
     const response = [];
     files.forEach((file) => {
       const fileReponse = {

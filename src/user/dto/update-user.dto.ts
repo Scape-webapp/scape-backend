@@ -24,7 +24,7 @@ export class UserUpdate {
   name: string;
 
   @ApiProperty()
-  @IsString()
+  // @IsString()
   @IsOptional()
   profile_image: string;
 
