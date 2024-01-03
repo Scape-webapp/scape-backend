@@ -7,6 +7,5 @@ export class MessageHistoryBody {
   receiver: Array<ObjectId>;
 
   @ApiProperty({ required: true })
-  @IsObject()
   sender: ObjectId;
 }
