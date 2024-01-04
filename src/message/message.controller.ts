@@ -10,6 +10,7 @@ import {
 import { MessageService } from './message.service';
 import { MessageBody } from './dto/message.dto';
 import { MessageHistoryBody } from './dto/message-history.dto';
+import { Types } from 'mongoose';
 
 @Controller('message')
 export class MessageController {
@@ -17,7 +18,7 @@ export class MessageController {
   @Post('/')
   async create(@Body() messageBody: MessageBody) {
     try {
-      return await this.messageService.create(messageBody);
+      return this.messageService.create(messageBody);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -25,12 +26,18 @@ export class MessageController {
   @Post('/history')
   async find(@Body() messageHistoryBody: MessageHistoryBody) {
     try {
-      messageHistoryBody.receiver.push(messageHistoryBody.sender);
+      messageHistoryBody.receiver = [
+        ...messageHistoryBody.receiver,
+        messageHistoryBody.sender,
+      ];
+      messageHistoryBody.receiver.forEach((it: any) => {
+        it = new Types.ObjectId(it);
+      });
       const filters = {
         receiver: { $in: messageHistoryBody.receiver },
         sender: { $in: messageHistoryBody.receiver },
       };
-      return await this.messageService.find(filters);
+      return this.messageService.find(filters);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -38,7 +45,7 @@ export class MessageController {
   @Get('/:id')
   async findOne(@Param() id: string) {
     try {
-      return await this.messageService.fetchLastMsgList(id);
+      return this.messageService.fetchLastMsgList(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
