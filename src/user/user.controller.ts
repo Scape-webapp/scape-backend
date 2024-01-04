@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -118,25 +119,52 @@ export class UserController {
   })
   @UseInterceptors(FilesInterceptor('file'))
   upload(@UploadedFiles() files) {
-    const response = [];
-    files.forEach((file) => {
-      const fileReponse = {
-        originalname: file.originalname,
-        encoding: file.encoding,
-        mimetype: file.mimetype,
-        id: file.id,
-        filename: file.filename,
-        metadata: file.metadata,
-        bucketName: file.bucketName,
-        chunkSize: file.chunkSize,
-        size: file.size,
-        md5: file.md5,
-        uploadDate: file.uploadDate,
-        contentType: file.contentType,
-      };
-      response.push(fileReponse);
-    });
-    console.log('first', response);
-    return response;
+    try {
+      const response = [];
+      files.forEach((file) => {
+        const fileReponse = {
+          originalname: file.originalname,
+          encoding: file.encoding,
+          mimetype: file.mimetype,
+          id: file.id,
+          filename: file.filename,
+          metadata: file.metadata,
+          bucketName: file.bucketName,
+          chunkSize: file.chunkSize,
+          size: file.size,
+          md5: file.md5,
+          uploadDate: file.uploadDate,
+          contentType: file.contentType,
+        };
+        response.push(fileReponse);
+      });
+      console.log('first', response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  @Get('/img/:id')
+  // @ApiBadRequestResponse({ type: any })
+  async getFile(@Param('id') id: string, @Res() res) {
+    try {
+      console.log(id);
+      const file = await this.userService.findInfo(id);
+      console.log(file);
+      const filestream = await this.userService.readStream(id);
+      console.log(filestream);
+      if (!filestream) {
+        throw new HttpException(
+          'An error occurred while retrieving file',
+          HttpStatus.EXPECTATION_FAILED,
+        );
+      }
+      res.header('Content-Type', file.contentType);
+      console.log(file.contentType);
+      return filestream.pipe(res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
