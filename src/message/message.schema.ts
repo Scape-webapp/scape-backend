@@ -8,8 +8,8 @@ export type MessageDocument = HydratedDocument<Message>;
   versionKey: false,
 })
 export class Message {
-  @Prop({ required: true, type: [mongoose.Schema.Types.ObjectId] })
-  receiver: Array<ObjectId>;
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
+  receiver: ObjectId;
 
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
   sender: ObjectId;
