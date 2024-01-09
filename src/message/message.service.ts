@@ -15,7 +15,7 @@ export class MessageService {
     return this.MessageModel.create(messageBody);
   }
   find(filter) {
-    return this.MessageModel.find(filter).sort({createdAt : 1});
+    return this.MessageModel.find(filter).sort({ createdAt: 1 });
   }
   findOne(id: string) {
     return this.MessageModel.findById(id);
@@ -31,17 +31,10 @@ export class MessageService {
             },
             {
               receiver: {
-                $elemMatch: {
-                  $eq: userId,
-                },
+                $eq: userId,
               },
             },
           ],
-        },
-      },
-      {
-        $unwind: {
-          path: '$receiver',
         },
       },
       {
