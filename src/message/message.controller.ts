@@ -41,8 +41,8 @@ export class MessageController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-  @Get('/:id')
-  async findOne(@Param() id: string) {
+  @Get('/chat-list/:id')
+  async ChatList(@Param() id: string) {
     try {
       return this.messageService.fetchLastMsgList(id);
     } catch (error) {
