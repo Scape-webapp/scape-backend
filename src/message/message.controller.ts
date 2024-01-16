@@ -9,9 +9,8 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { MessageBody } from './dto/message.dto';
-import { MessageChatBody, MessageHistoryBody } from './dto/message-history.dto';
+import { MessageChatBody } from './dto/message-history.dto';
 // import { MessageHistoryBody } from './dto/message-history.dto';
-import mongoose, { ObjectId } from 'mongoose';
 
 @Controller('message')
 export class MessageController {
@@ -53,21 +52,13 @@ export class MessageController {
   @Post('/chat')
   async find(@Body() messageChatBody: MessageChatBody) {
     try {
-      const receiverId = new mongoose.Types.ObjectId(
-        messageChatBody.receiver.toString(),
-      );
-      const senderId = new mongoose.Types.ObjectId(
-        messageChatBody.sender.toString(),
-      );
+      const ids = [];
+      ids.push(messageChatBody.receiver);
+      ids.push(messageChatBody.sender);
+
       const filters = {
-        // receiver: messageChatBody.receiver,
-        // sender: messageChatBody.receiver,
-        sender: {
-          $or: [{ receiver: receiverId }, { sender: senderId }],
-        },
-        receiver: {
-          $or: [{ receiver: receiverId }, { sender: senderId }],
-        },
+        receiver: { $in: ids },
+        sender: { $in: ids },
       };
       return this.messageService.find(filters);
     } catch (error) {
