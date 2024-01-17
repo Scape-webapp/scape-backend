@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { MessageBody } from './dto/message.dto';
-import { MessageHistoryBody } from './dto/message-history.dto';
+import { MessageChatBody } from './dto/message-history.dto';
 // import { MessageHistoryBody } from './dto/message-history.dto';
 
 @Controller('message')
@@ -23,28 +23,44 @@ export class MessageController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-  @Post('/history')
-  async find(@Body() messageHistoryBody: MessageHistoryBody) {
+  // @Post('/history')
+  // async find(@Body() messageHistoryBody: MessageHistoryBody) {
+  //   try {
+  //     const filters = {
+  //       $or: [
+  //         {
+  //           sender: messageHistoryBody.id,
+  //         },
+  //         {
+  //           receiver: messageHistoryBody.id,
+  //         },
+  //       ],
+  //     };
+  //     return this.messageService.find(filters);
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+  @Get('/chat-list/:id')
+  async ChatList(@Param() id: string) {
     try {
-      const filters = {
-        $or: [
-          {
-            sender: messageHistoryBody.id,
-          },
-          {
-            receiver: messageHistoryBody.id,
-          },
-        ],
-      };
-      return this.messageService.find(filters);
+      return this.messageService.fetchLastMsgList(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-  @Get('/:id')
-  async findOne(@Param() id: string) {
+  @Post('/chat')
+  async find(@Body() messageChatBody: MessageChatBody) {
     try {
-      return this.messageService.fetchLastMsgList(id);
+      const ids = [];
+      ids.push(messageChatBody.receiver);
+      ids.push(messageChatBody.sender);
+
+      const filters = {
+        receiver: { $in: ids },
+        sender: { $in: ids },
+      };
+      return this.messageService.find(filters);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

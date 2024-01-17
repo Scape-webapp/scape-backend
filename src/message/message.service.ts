@@ -86,6 +86,9 @@ export class MessageService {
           'user.updatedAt': 0,
         },
       },
+      {
+        $sort: { createdAt: -1 },
+      },
     ]);
   }
 }

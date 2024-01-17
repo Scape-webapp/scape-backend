@@ -8,6 +8,7 @@ export class UserUpdate {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   user_name: string;
 
   // @ApiProperty({ required: true })
@@ -21,6 +22,7 @@ export class UserUpdate {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   name: string;
 
   @ApiProperty()
