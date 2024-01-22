@@ -27,6 +27,12 @@ export class UserService {
     ).lean();
   }
 
+  async findByUsername(username: string) {
+    return this.UserModel.findOne({
+      user_name: username,
+    }).lean();
+  }
+
   findOne(id: string) {
     return this.UserModel.findById(new mongoose.Types.ObjectId(id)).lean();
   }
