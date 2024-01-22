@@ -28,7 +28,6 @@ export class UserService {
   }
 
   async findByUsername(username: string) {
-    // return this.UserModel.findOne({ username }).lean();
     return this.UserModel.findOne({
       user_name: username,
     }).lean();
