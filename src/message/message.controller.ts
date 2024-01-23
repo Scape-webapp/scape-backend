@@ -23,24 +23,7 @@ export class MessageController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-  // @Post('/history')
-  // async find(@Body() messageHistoryBody: MessageHistoryBody) {
-  //   try {
-  //     const filters = {
-  //       $or: [
-  //         {
-  //           sender: messageHistoryBody.id,
-  //         },
-  //         {
-  //           receiver: messageHistoryBody.id,
-  //         },
-  //       ],
-  //     };
-  //     return this.messageService.find(filters);
-  //   } catch (error) {
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
+
   @Get('/chat-list/:id')
   async ChatList(@Param() id: string) {
     try {
@@ -49,6 +32,7 @@ export class MessageController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   @Post('/chat')
   async find(@Body() messageChatBody: MessageChatBody) {
     try {
@@ -57,10 +41,31 @@ export class MessageController {
       ids.push(messageChatBody.sender);
 
       const filters = {
+        $and: [
+          { receiver: { $in: ids }, sender: { $in: ids } },
+          { archive: { $nin: messageChatBody.sender } },
+        ],
+      };
+      return this.messageService.find(filters);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('/clear-chat')
+  async clearChat(@Body() messageChatBody: MessageChatBody) {
+    try {
+      const ids = [];
+      ids.push(messageChatBody.sender);
+      ids.push(messageChatBody.receiver);
+
+      const filter = {
         receiver: { $in: ids },
         sender: { $in: ids },
       };
-      return this.messageService.find(filters);
+      return this.messageService.findandUpdate(filter, {
+        $push: { archive: messageChatBody.sender },
+      });
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

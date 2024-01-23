@@ -14,12 +14,15 @@ export class MessageService {
   create(messageBody: MessageBody) {
     return this.MessageModel.create(messageBody);
   }
+
   find(filter) {
     return this.MessageModel.find(filter).sort({ createdAt: 1 });
   }
+
   findOne(id: string) {
     return this.MessageModel.findById(id);
   }
+
   fetchLastMsgList(id: string) {
     const userId = new mongoose.Types.ObjectId(id);
     return this.MessageModel.aggregate([
@@ -90,5 +93,9 @@ export class MessageService {
         $sort: { createdAt: -1 },
       },
     ]);
+  }
+
+  findandUpdate(filter, update) {
+    return this.MessageModel.updateMany(filter, update, { new: true });
   }
 }
