@@ -41,8 +41,10 @@ export class MessageController {
       ids.push(messageChatBody.sender);
 
       const filters = {
-        receiver: { $in: ids },
-        sender: { $in: ids },
+        $and: [
+          { receiver: { $in: ids }, sender: { $in: ids } },
+          { archive: { $nin: messageChatBody.sender } },
+        ],
       };
       return this.messageService.find(filters);
     } catch (error) {
