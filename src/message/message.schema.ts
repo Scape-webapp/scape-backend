@@ -16,6 +16,9 @@ export class Message {
 
   @Prop({ required: true })
   text: string;
+
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], default: [] })
+  archive: Array<ObjectId>;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
