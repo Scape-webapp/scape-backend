@@ -8,14 +8,16 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserBody } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserUpdate } from './dto/update-user.dto';
-import { Login } from './dto/login-user.dto';
+import { Login, refreshTkn } from './dto/login-user.dto';
 import * as jwt from 'jsonwebtoken';
 import * as _ from 'lodash';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -46,6 +48,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Patch('/')
   async update(@Body() userUpdate: UserUpdate) {
     try {
@@ -55,6 +58,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Get('/search/:username')
   async findByUsername(@Param('username') username: string) {
     try {
@@ -63,6 +67,8 @@ export class UserController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @UseGuards(AuthGuard)
   @Get('/:id')
   async findById(@Param() id: string) {
     try {
@@ -101,6 +107,34 @@ export class UserController {
       } else {
         throw new Error('Invalid Username or password!');
       }
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('/refresh')
+  async refresh(@Body() refersh: refreshTkn) {
+    try {
+      const decoded: any = jwt.verify(
+        refersh.token,
+        process.env.REFRESH_SECRET as string,
+      );
+
+      if (decoded.user_name !== refersh.user_name) {
+        throw new HttpException(
+          'Invalid token,try login again',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const accessToken = jwt.sign(
+        { user_name: refersh.user_name },
+        'accessSecret',
+        {
+          expiresIn: '60m', //alter this line in future
+        },
+      );
+
+      return { success: true, accessToken };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

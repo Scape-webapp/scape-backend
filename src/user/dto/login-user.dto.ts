@@ -10,3 +10,13 @@ export class Login {
   @IsString()
   password: string;
 }
+
+export class refreshTkn {
+  @ApiProperty({ required: true })
+  @IsString()
+  user_name: string;
+
+  @ApiProperty({ required: true })
+  @IsString()
+  token: string;
+}

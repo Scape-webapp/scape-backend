@@ -6,12 +6,13 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { MessageBody } from './dto/message.dto';
 import { MessageChatBody } from './dto/message-history.dto';
-// import { MessageHistoryBody } from './dto/message-history.dto';
-
+import { AuthGuard } from 'src/auth/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
