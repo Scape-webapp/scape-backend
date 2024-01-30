@@ -12,4 +12,8 @@ export class MessageBody {
   @ApiProperty({ required: true })
   @IsString()
   text: string;
+
+  @ApiProperty()
+  @IsString()
+  image: string;
 }

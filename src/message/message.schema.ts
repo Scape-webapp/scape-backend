@@ -17,6 +17,9 @@ export class Message {
   @Prop({ required: true })
   text: string;
 
+  @Prop()
+  image: string;
+
   @Prop({ type: [mongoose.Schema.Types.ObjectId], default: [] })
   archive: Array<ObjectId>;
 }
