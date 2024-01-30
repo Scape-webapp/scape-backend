@@ -105,10 +105,16 @@ export class UserController {
         user = _.omit(user, ['password']);
         return { accessToken, refreshToken, user: user };
       } else {
-        throw new Error('Invalid Username or password!');
+        throw new HttpException(
+          'Invalid Username or password!',
+          HttpStatus.CONFLICT,
+        );
       }
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        error.message || 'Something went wrong!',
+        error.status || HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
