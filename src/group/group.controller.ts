@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -7,9 +16,14 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
-  @Post()
+  @Post('/newgroup')
   create(@Body() createGroupDto: CreateGroupDto) {
-    return this.groupService.create(createGroupDto);
+    // return this.groupService.create(createGroupDto);
+    try {
+      return this.groupService.create(createGroupDto);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
