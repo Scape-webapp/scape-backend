@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
+import { ObjectId } from 'mongoose';
 
 export class CreateGroupDto {
   @ApiProperty({ required: true })
@@ -15,4 +16,12 @@ export class CreateGroupDto {
   @IsString()
   @IsOptional()
   description: string;
+
+  @ApiProperty()
+  @IsArray()
+  users: ObjectId[];
+
+  @ApiProperty()
+  @IsArray()
+  admins: ObjectId[];
 }
