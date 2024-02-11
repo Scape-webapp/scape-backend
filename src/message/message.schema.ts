@@ -17,11 +17,14 @@ export class Message {
   @Prop({ required: true })
   text: string;
 
-  @Prop()
+  @Prop({ required: false })
   image: string;
 
   @Prop({ type: [mongoose.Schema.Types.ObjectId], default: [] })
   archive: Array<ObjectId>;
+
+  @Prop({ required: false, type: mongoose.Schema.Types.ObjectId })
+  groupId: ObjectId;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
