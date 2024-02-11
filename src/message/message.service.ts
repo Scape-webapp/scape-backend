@@ -16,7 +16,7 @@ export class MessageService {
   }
 
   find(filter) {
-    return this.MessageModel.find(filter).sort({ createdAt: 1 });
+    return this.MessageModel.find(filter).sort({ createdAt: 1 }).lean();
   }
 
   findOne(id: string) {
