@@ -76,4 +76,9 @@ export class GroupService {
   update(id: number, updateGroupDto: UpdateGroupDto) {
     return this.GroupModel.findByIdAndUpdate(id, updateGroupDto);
   }
+  findByGrpName(grpname: string) {
+    return this.GroupModel.findOne({
+      name: grpname,
+    }).lean();
+  }
 }

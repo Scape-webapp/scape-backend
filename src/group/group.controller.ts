@@ -67,4 +67,12 @@ export class GroupController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+  @Get('/search-group/:grpname')
+  async findByUsername(@Param('grpname') grpname: string) {
+    try {
+      return await this.groupService.findByGrpName(grpname);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
