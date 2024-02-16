@@ -20,8 +20,6 @@ export class GroupService {
     return this.GroupModel.find();
   }
 
-  // check when no send sent on group chat?
-  // test on 659c310c11daa0077d111a0f
   fetchGroupList(id: string) {
     const userId = new mongoose.Types.ObjectId(id);
     return this.GroupModel.aggregate([
@@ -52,6 +50,11 @@ export class GroupService {
         },
       },
       {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $lookup: {
           from: 'users',
           localField: 'message.sender',
@@ -59,6 +62,9 @@ export class GroupService {
           as: 'senderName',
         },
       },
+
+      // handle username later
+
       // { $unwind: { path: '$message' } },
       // { $unwind: { path: '$senderName' } },
       // {
