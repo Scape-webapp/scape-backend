@@ -31,15 +31,23 @@ export class GroupController {
     }
   }
 
-  @Get()
-  findAll() {
-    return this.groupService.findAll();
+  @Get('/group-list/:id')
+  async findById(@Param() id: string) {
+    try {
+      return await this.groupService.fetchGroupList(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
+  // @Get()
+  // findAll() {
+  //   return this.groupService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.groupService.findOne(+id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
@@ -55,6 +63,14 @@ export class GroupController {
       }
 
       return this.messageService.find({ groupId: new Types.ObjectId(id) });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+  @Get('/search-group/:grpname')
+  async findByUsername(@Param('grpname') grpname: string) {
+    try {
+      return await this.groupService.findByGrpName(grpname);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
