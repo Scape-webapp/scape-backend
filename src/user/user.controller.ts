@@ -102,6 +102,7 @@ export class UserController {
             expiresIn: '7d',
           },
         );
+
         user = _.omit(user, ['password']);
         return { accessToken, refreshToken, user: user };
       } else {
@@ -134,9 +135,9 @@ export class UserController {
       }
       const accessToken = jwt.sign(
         { user_name: refersh.user_name },
-        'accessSecret',
+        process.env.ACCESS_SECRET as string,
         {
-          expiresIn: '60m', //alter this line in future
+          expiresIn: '60m',
         },
       );
 

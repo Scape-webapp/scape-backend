@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GroupSchema } from './group.schema';
 import { MessageService } from 'src/message/message.service';
 import { MessageSchema } from 'src/message/message.schema';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MessageSchema } from 'src/message/message.schema';
       { name: 'group', schema: GroupSchema },
       { name: 'message', schema: MessageSchema },
     ]),
+    AuthModule,
   ],
   controllers: [GroupController],
   providers: [GroupService, MessageService],
