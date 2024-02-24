@@ -7,13 +7,16 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { MessageService } from 'src/message/message.service';
 import { Types } from 'mongoose';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('group')
 export class GroupController {
   constructor(
@@ -23,7 +26,6 @@ export class GroupController {
 
   @Post('/newgroup')
   create(@Body() createGroupDto: CreateGroupDto) {
-    // return this.groupService.create(createGroupDto);
     try {
       return this.groupService.create(createGroupDto);
     } catch (error) {
