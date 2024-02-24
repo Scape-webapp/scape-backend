@@ -39,6 +39,15 @@ export class GroupController {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Get('/group-info/:id')
+  async findByGroupId(@Param('id') id: string) {
+    try {
+      return await this.groupService.getGroupInfo(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
   // @Get()
   // findAll() {
   //   return this.groupService.findAll();
