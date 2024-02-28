@@ -20,6 +20,25 @@ export class GroupService {
     return this.GroupModel.find();
   }
 
+  getGroupInfo(id: string) {
+    const groupId = new mongoose.Types.ObjectId(id);
+    return this.GroupModel.aggregate([
+      {
+        $match: {
+          _id: groupId,
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'users',
+          foreignField: '_id',
+          as: 'grpmember',
+        },
+      },
+    ]);
+  }
+
   fetchGroupList(id: string) {
     const userId = new mongoose.Types.ObjectId(id);
     return this.GroupModel.aggregate([
@@ -82,8 +101,8 @@ export class GroupService {
     return this.GroupModel.findOne(filter);
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return this.GroupModel.findByIdAndUpdate(id, updateGroupDto);
+  update(updateGroupDto: UpdateGroupDto) {
+    return this.GroupModel.findByIdAndUpdate(updateGroupDto);
   }
   findByGrpName(grpname: string) {
     return this.GroupModel.findOne({
