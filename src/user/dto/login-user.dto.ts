@@ -18,5 +18,9 @@ export class refreshTkn {
 
   @ApiProperty({ required: true })
   @IsString()
+  userId: string;
+
+  @ApiProperty({ required: true })
+  @IsString()
   token: string;
 }
