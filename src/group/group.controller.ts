@@ -62,12 +62,15 @@ export class GroupController {
   //   return this.groupService.findOne(+id);
   // }
 
-  @Patch('/')
-  // update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-  async update(updateGroupDto: UpdateGroupDto) {
+  @Patch('/:id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateGroupDto: UpdateGroupDto,
+  ) {
+    // async update(updateGroupDto: UpdateGroupDto) {
     // return this.groupService.update(+id, updateGroupDto);
     try {
-      return await this.groupService.update(updateGroupDto);
+      return await this.groupService.update(id, updateGroupDto);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

@@ -101,9 +101,10 @@ export class GroupService {
     return this.GroupModel.findOne(filter);
   }
 
-  update(updateGroupDto: UpdateGroupDto) {
-    return this.GroupModel.findByIdAndUpdate(updateGroupDto);
+  update(id: string, updateGroupDto: UpdateGroupDto) {
+    return this.GroupModel.findByIdAndUpdate(id, updateGroupDto);
   }
+
   findByGrpName(grpname: string) {
     return this.GroupModel.findOne({
       name: grpname,
