@@ -89,14 +89,14 @@ export class UserController {
       const isMatch = await bcrypt.compare(login.password, user.password);
       if (isMatch) {
         const accessToken = jwt.sign(
-          { user_name: login.user_name },
+          { user_name: login.user_name, _id: user?._id },
           process.env.ACCESS_SECRET as string,
           {
             expiresIn: '60m',
           },
         );
         const refreshToken = jwt.sign(
-          { user_name: login.user_name },
+          { user_name: login.user_name, _id: user?._id },
           process.env.REFRESH_SECRET as string,
           {
             expiresIn: '7d',
@@ -134,7 +134,7 @@ export class UserController {
         );
       }
       const accessToken = jwt.sign(
-        { user_name: refersh.user_name },
+        { user_name: refersh.user_name, _id: refersh.userId },
         process.env.ACCESS_SECRET as string,
         {
           expiresIn: '60m',
