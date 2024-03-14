@@ -13,6 +13,7 @@ export class UserService {
     private UserModel: Model<UserDocument>,
   ) {}
 
+  
   create(userBody: UserBody) {
     return this.UserModel.create(userBody);
   }
