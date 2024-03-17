@@ -84,10 +84,7 @@ export class GroupController {
         throw new HttpException('Group not found', HttpStatus.BAD_REQUEST);
       }
 
-      return this.messageService.find({
-        groupId: new Types.ObjectId(id),
-        archive: { $nin: [new Types.ObjectId(req?.decodedData?._id)] },
-      });
+      return this.messageService.fetchGroupMsg(id, req?.decodedData?._id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
