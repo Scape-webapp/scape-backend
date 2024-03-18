@@ -23,18 +23,26 @@ export class UserService {
       userUpdate,
       {
         new: true,
+        projection: {
+          password: 0,
+        },
       },
     ).lean();
   }
 
   async findByUsername(username: string) {
-    return this.UserModel.find({
-      user_name: { $regex: `${username}`, $options: 'i' },
-    }).lean();
+    return this.UserModel.find(
+      {
+        user_name: { $regex: `${username}`, $options: 'i' },
+      },
+      { password: 0 },
+    ).lean();
   }
 
   findOne(id: string) {
-    return this.UserModel.findById(new mongoose.Types.ObjectId(id)).lean();
+    return this.UserModel.findById(new mongoose.Types.ObjectId(id), {
+      password: 0,
+    }).lean();
   }
 
   // findOne(id: string) {
@@ -43,6 +51,6 @@ export class UserService {
   // }
 
   findFilter(filter: any) {
-    return this.UserModel.findOne(filter).lean();
+    return this.UserModel.findOne(filter, { password: 0 }).lean();
   }
 }
