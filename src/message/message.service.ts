@@ -98,4 +98,40 @@ export class MessageService {
   findandUpdate(filter, update) {
     return this.MessageModel.updateMany(filter, update, { new: true });
   }
+
+  fetchGroupMsg(grpId: string, uId: string) {
+    const groupId = new mongoose.Types.ObjectId(grpId);
+    const userId = new mongoose.Types.ObjectId(uId);
+    return this.MessageModel.aggregate([
+      {
+        $match: {
+          groupId: groupId,
+          archive: { $nin: [userId] },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'sender',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+        },
+      },
+      {
+        $project: {
+          'user.password': 0,
+          'user.createdAt': 0,
+          'user.updatedAt': 0,
+          'user.description': 0,
+          'user.email': 0,
+          'user.name': 0,
+        },
+      },
+    ]);
+  }
 }
