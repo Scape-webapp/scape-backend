@@ -13,7 +13,6 @@ export class UserService {
     private UserModel: Model<UserDocument>,
   ) {}
 
-  
   create(userBody: UserBody) {
     return this.UserModel.create(userBody);
   }
@@ -29,8 +28,8 @@ export class UserService {
   }
 
   async findByUsername(username: string) {
-    return this.UserModel.findOne({
-      user_name: username,
+    return this.UserModel.find({
+      user_name: { $regex: `${username}`, $options: 'i' },
     }).lean();
   }
 
