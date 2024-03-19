@@ -62,7 +62,7 @@ export class UserController {
   @Get('/search/:username')
   async findByUsername(@Param('username') username: string) {
     try {
-      return await this.userService.findByUsername(username);
+      return this.userService.findByUsername(username);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
