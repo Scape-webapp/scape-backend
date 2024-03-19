@@ -51,6 +51,6 @@ export class UserService {
   // }
 
   findFilter(filter: any) {
-    return this.UserModel.findOne(filter, { password: 0 }).lean();
+    return this.UserModel.findOne(filter).lean();
   }
 }
