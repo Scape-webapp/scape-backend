@@ -15,7 +15,7 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { MessageService } from 'src/message/message.service';
 import { Types } from 'mongoose';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { clearGroupChatDTO } from './dto/groups.dto';
 
 @UseGuards(AuthGuard)
