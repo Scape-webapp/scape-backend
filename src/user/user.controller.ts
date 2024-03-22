@@ -49,7 +49,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Patch('/')
+  @Patch('/update-profile')
   async update(@Body() userUpdate: UserUpdate) {
     try {
       return await this.userService.update(userUpdate);
