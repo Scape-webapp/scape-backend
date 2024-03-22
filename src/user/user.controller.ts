@@ -48,7 +48,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Patch('/update-profile')
   async update(@Body() userUpdate: UserUpdate) {
     try {
