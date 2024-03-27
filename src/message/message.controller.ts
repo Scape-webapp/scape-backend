@@ -11,7 +11,7 @@ import {
 import { MessageService } from './message.service';
 import { MessageBody } from './dto/message.dto';
 import { MessageChatBody } from './dto/message-history.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('message')
 export class MessageController {

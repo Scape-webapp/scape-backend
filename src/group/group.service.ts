@@ -69,8 +69,37 @@ export class GroupService {
         },
       },
       {
+        $set: {
+          islastMessage: {
+            $last: '$message',
+          },
+        },
+      },
+      {
         $sort: {
-          createdAt: -1,
+          'islastMessage.createdAt': -1,
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'islastMessage.sender',
+          foreignField: '_id',
+          as: 'lastMsgName',
+        },
+      },
+      {
+        $unwind: {
+          path: '$lastMsgName',
+        },
+      },
+      {
+        $project: {
+          'lastMsgName.password': 0,
+          'lastMsgName.createdAt': 0,
+          'lastMsgName.updatedAt': 0,
+          'lastMsgName.description': 0,
+          'lastMsgName.email': 0,
         },
       },
       {

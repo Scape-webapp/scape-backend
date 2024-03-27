@@ -17,7 +17,7 @@ import { UserUpdate } from './dto/update-user.dto';
 import { Login, refreshTkn } from './dto/login-user.dto';
 import * as jwt from 'jsonwebtoken';
 import * as _ from 'lodash';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -48,8 +48,8 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
-  @Patch('/')
+  // @UseGuards(AuthGuard)
+  @Patch('/update-profile')
   async update(@Body() userUpdate: UserUpdate) {
     try {
       return await this.userService.update(userUpdate);
