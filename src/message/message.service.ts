@@ -129,7 +129,6 @@ export class MessageService {
           'user.updatedAt': 0,
           'user.description': 0,
           'user.email': 0,
-          'user.name': 0,
         },
       },
     ]);
